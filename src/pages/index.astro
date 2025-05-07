@@ -1,0 +1,282 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import CallToAction from "../components/CallToAction.astro";
+import BlogPostCard from "../components/BlogPostCard.astro";
+import { getCollection } from "astro:content";
+
+// Get the 3 most recent blog posts
+const allPosts = await getCollection("blog");
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<MainLayout title="Home">
+  <Header slot="header" />
+  
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-primary-700 to-primary-900 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold font-heading leading-tight mb-6">
+          Bringing <span class="text-secondary-300">Clarity</span> to Your AI Journey
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-gray-100">
+          Expert guidance to navigate the complex world of AI and implement solutions that drive real business value.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a 
+            href="/services" 
+            class="px-6 py-3 bg-white text-primary-700 font-medium rounded-md shadow-sm hover:bg-gray-100 transition-colors"
+          >
+            Explore Services
+          </a>
+          <a 
+            href="/contact" 
+            class="px-6 py-3 bg-secondary-600 text-white font-medium rounded-md shadow-sm hover:bg-secondary-700 transition-colors"
+          >
+            Book a Free Call
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Meet Jim Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:flex items-center gap-12">
+        <div class="lg:w-5/12 mb-10 lg:mb-0">
+          <div class="aspect-square rounded-full overflow-hidden bg-gray-200 max-w-md mx-auto">
+            <!-- Jim's photo -->
+            <img src="/jim.jpg" alt="Jim Shelly" class="w-full h-full object-cover object-center object-[center_1px]" />
+          </div>
+        </div>
+        <div class="lg:w-7/12">
+          <h2 class="text-3xl font-bold font-heading mb-6 text-gray-900">Meet Jim</h2>
+          <p class="text-lg text-gray-700 mb-6">
+            With over 30 years of experience in consulting, I've helped businesses evolve from paper-based systems to digital transformation and now into the era of artificial intelligence.
+          </p>
+          <p class="text-lg text-gray-700 mb-6">
+            My approach is practical, focusing on AI solutions that deliver measurable value rather than chasing the latest hype. I work closely with clients to understand their specific needs and implement AI tools that solve real business problems.
+          </p>
+          <a 
+            href="/about" 
+            class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium"
+          >
+            Learn more about my background
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold font-heading mb-4 text-gray-900">AI Services</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Practical AI solutions designed to solve real business problems and create tangible value.
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <ServiceCard 
+          title="Follow-Up Assistant" 
+          description="Automate customer follow-ups with AI that understands context and provides personalized responses."
+          serviceType="saas"
+          price="$1,000/mo"
+          icon="follow-up.svg"
+        />
+        
+        <ServiceCard 
+          title="Internal AI Search" 
+          description="Transform how employees access company knowledge with a powerful AI-powered search solution."
+          serviceType="one-time"
+          price="$5,000"
+          icon="search.svg"
+        />
+        
+        <ServiceCard 
+          title="Workflow Automation" 
+          description="Identify and automate repetitive tasks in your business with custom AI solutions."
+          serviceType="ongoing"
+          price="$3,000"
+          icon="workflow.svg"
+        />
+        
+        <ServiceCard 
+          title="AI Readiness Audit" 
+          description="Comprehensive assessment of your business to identify the best AI implementation opportunities."
+          serviceType="one-time"
+          price="$2,500"
+          icon="audit.svg"
+        />
+      </div>
+      
+      <div class="text-center mt-12">
+        <a 
+          href="/services" 
+          class="inline-flex items-center px-5 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors"
+        >
+          View All Services
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Recent Blog Posts Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold font-heading mb-4 text-gray-900">Latest Insights</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Practical advice and strategies for implementing AI in your business
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        {recentPosts.map((post) => (
+          <BlogPostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            author={post.data.author}
+            slug={post.slug}
+            image={post.data.image}
+            tags={post.data.tags}
+            featured={post.data.featured}
+          />
+        ))}
+      </div>
+      
+      <div class="text-center mt-12">
+        <a 
+          href="/blog" 
+          class="inline-flex items-center px-5 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors"
+        >
+          View All Articles
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing Summary Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold font-heading mb-4 text-gray-900">Simple, Transparent Pricing</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          I offer flexible engagement models to suit your business needs and budget.
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-900">One-Time Projects</h3>
+            <div class="text-4xl font-bold text-primary-600 mb-4">$2,500 - $15,000</div>
+            <p class="text-gray-600 mb-6">Perfect for specific AI implementations with a clear scope and deliverables.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Defined project scope</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Clear deliverables</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>30-day support</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden relative border-2 border-primary-500">
+          <div class="absolute top-0 w-full bg-primary-500 text-white text-center py-1 text-sm font-medium">
+            Most Popular
+          </div>
+          <div class="p-6 pt-10">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-900">Ongoing Support</h3>
+            <div class="text-4xl font-bold text-primary-600 mb-4">$2,000 - $5,000/mo</div>
+            <p class="text-gray-600 mb-6">Continuous AI implementation, optimization, and support for growing businesses.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Dedicated support</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Regular optimization</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Monthly reporting</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-900">AI-as-a-Service</h3>
+            <div class="text-4xl font-bold text-primary-600 mb-4">Custom Pricing</div>
+            <p class="text-gray-600 mb-6">Fully managed AI solutions with pay-per-use or subscription models.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Fully managed</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Flexible pricing</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>SLA guarantees</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Call to Action -->
+  <CallToAction />
+  
+  <Footer slot="footer" />
+</MainLayout>

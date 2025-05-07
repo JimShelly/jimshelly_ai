@@ -1,0 +1,68 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon?: string;
+  serviceType?: 'one-time' | 'ongoing' | 'saas';
+  price?: string;
+  link?: string;
+}
+
+const { 
+  title, 
+  description, 
+  icon = "default-icon.svg", 
+  serviceType = "one-time",
+  price,
+  link = "/services"
+} = Astro.props;
+
+// Determine the service type badge color
+const serviceBadgeClasses = {
+  'one-time': 'bg-blue-100 text-blue-800',
+  'ongoing': 'bg-green-100 text-green-800',
+  'saas': 'bg-purple-100 text-purple-800'
+};
+
+const serviceTypeLabel = {
+  'one-time': 'One-time Service',
+  'ongoing': 'Ongoing Support',
+  'saas': 'AI-as-a-Service'
+};
+---
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+  <div class="p-6">
+    <div class="flex items-start mb-4">
+      {icon && (
+        <div class="flex-shrink-0 mr-4">
+          <img src={`/icons/${icon}`} alt={title} class="w-12 h-12" />
+        </div>
+      )}
+      <div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
+        <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${serviceBadgeClasses[serviceType]}`}>
+          {serviceTypeLabel[serviceType]}
+        </span>
+      </div>
+    </div>
+    
+    <p class="text-gray-600 mb-4">{description}</p>
+    
+    {price && (
+      <p class="text-lg font-semibold text-gray-800 mb-4">
+        Starting at {price}
+      </p>
+    )}
+    
+    <a 
+      href={link} 
+      class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium"
+    >
+      Learn more
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>

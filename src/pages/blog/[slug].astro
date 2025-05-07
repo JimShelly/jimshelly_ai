@@ -1,0 +1,133 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { getCollection } from "astro:content";
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+// Get the blog post for this page
+// Explicitly type entry to match the expected structure
+const { entry }: { entry: { render: () => Promise<{ Content: any }>, data: any } } = Astro.props;
+const { Content } = await entry.render();
+
+// Format the date
+const formattedDate = entry.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Default author if not specified
+const author = entry.data.author || "Jim Shelly";
+
+---
+
+<MainLayout title={entry.data.title}>
+  <Header slot="header" />
+  
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Blog Post Header -->
+    <div class="mb-8 text-center">
+      <div class="text-sm text-gray-500 mb-3">
+        {formattedDate} {entry.data.author && `• ${author}`}
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold font-heading mb-4 text-gray-900">
+        {entry.data.title}
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {entry.data.description}
+      </p>
+    </div>
+    
+    <!-- Featured Image -->
+    {entry.data.image && (
+      <div class="mb-10 rounded-lg overflow-hidden">
+        <img 
+          src={entry.data.image} 
+          alt={entry.data.title}
+          class="w-full h-auto"
+        />
+      </div>
+    )}
+    
+    <!-- Tags -->
+    {entry.data.tags && entry.data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-8">
+        {entry.data.tags.map((tag) => (
+          <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+    
+    <!-- Blog Post Content -->
+    <div class="prose prose-lg max-w-none">
+      <Content />
+    </div>
+    
+    <!-- Author Bio -->
+    <div class="mt-16 pt-8 border-t border-gray-200">
+      <div class="flex items-center">
+        <div class="flex-shrink-0 mr-4">
+          <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">{author}</h3>
+          <p class="text-gray-600">AI Consultant & Implementation Specialist</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="mt-12 p-8 bg-gray-50 rounded-lg text-center">
+      <h2 class="text-2xl font-bold font-heading mb-4 text-gray-900">Ready to implement AI in your business?</h2>
+      <p class="text-lg text-gray-600 mb-6">Book a free consultation to discuss how AI can solve your specific business challenges.</p>
+      <a 
+        href="/contact" 
+        class="inline-block px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow-sm hover:bg-primary-700 transition-colors"
+      >
+        Schedule a Call
+      </a>
+    </div>
+  </article>
+  
+  <Footer slot="footer" />
+</MainLayout>
+
+<style>
+  /* Style for table of contents */
+  :global(.prose a[name]) {
+    scroll-margin-top: 100px;
+  }
+  
+  :global(.prose h2 a[name]),
+  :global(.prose h3 a[name]),
+  :global(.prose h4 a[name]) {
+    text-decoration: none;
+  }
+  
+  /* Style table of contents links */
+  :global(.prose ul:first-of-type) {
+    border-left: 2px solid #e5e7eb;
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Make anchor links work better with fixed header */
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+</style>

@@ -1,0 +1,232 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import CallToAction from "../components/CallToAction.astro";
+
+// Define services with more details for the dedicated page
+const services = [
+  {
+    title: "Follow-Up Assistant",
+    description: "Automate customer follow-ups with AI that understands context and provides personalized responses.",
+    longDescription: "Our Follow-Up Assistant leverages advanced AI to maintain ongoing relationships with your clients and prospects. It analyzes previous interactions, understands context, and generates personalized follow-up messages that sound natural and engaging. This solution helps you stay connected with your audience without the manual effort of writing individual messages.",
+    serviceType: "saas",
+    price: "$1,000/mo",
+    icon: "follow-up.svg",
+    features: [
+      "Context-aware messaging",
+      "Integration with CRM systems",
+      "Performance analytics dashboard",
+      "Customizable voice and tone settings",
+      "A/B testing capabilities"
+    ]
+  },
+  {
+    title: "Internal AI Search",
+    description: "Transform how employees access company knowledge with a powerful AI-powered search solution.",
+    longDescription: "Knowledge trapped in documents, emails, and databases is often inaccessible when needed most. Our Internal AI Search solution indexes all your company information and creates a powerful semantic search engine that understands questions in natural language and delivers precise answers, not just document links. Employees can find what they need in seconds rather than hours.",
+    serviceType: "one-time",
+    price: "$5,000",
+    icon: "search.svg",
+    features: [
+      "Natural language querying",
+      "Document understanding across formats",
+      "Secure access controls",
+      "Integration with existing systems",
+      "Regular knowledge base updates"
+    ]
+  },
+  {
+    title: "Workflow Automation",
+    description: "Identify and automate repetitive tasks in your business with custom AI solutions.",
+    longDescription: "Every business has repetitive processes that consume valuable time and resources. Our Workflow Automation service begins with a thorough analysis of your operations to identify automation opportunities. We then design and implement custom AI solutions that handle these tasks with minimal human intervention, allowing your team to focus on high-value activities.",
+    serviceType: "ongoing",
+    price: "$3,000",
+    icon: "workflow.svg",
+    features: [
+      "Process analysis and mapping",
+      "Custom automation development",
+      "Integration with existing tools",
+      "Ongoing optimization",
+      "Performance metrics and reporting"
+    ]
+  },
+  {
+    title: "AI Readiness Audit",
+    description: "Comprehensive assessment of your business to identify the best AI implementation opportunities.",
+    longDescription: "Before investing in AI solutions, it's crucial to understand where they can deliver the most value. Our AI Readiness Audit provides a thorough evaluation of your business processes, data infrastructure, and strategic goals to identify the most promising AI implementation opportunities. You'll receive a detailed roadmap with prioritized recommendations and expected ROI.",
+    serviceType: "one-time",
+    price: "$2,500",
+    icon: "audit.svg",
+    features: [
+      "Process efficiency analysis",
+      "Data quality assessment",
+      "Technology infrastructure review",
+      "Opportunity prioritization matrix",
+      "Implementation roadmap"
+    ]
+  },
+  {
+    title: "Custom LLM Development",
+    description: "Develop specialized language models fine-tuned to your business domain and needs.",
+    longDescription: "Generic AI models often lack the specific knowledge and context required for specialized business domains. Our Custom LLM Development service creates fine-tuned language models trained on your industry data and company knowledge. These models deliver more accurate, relevant, and safe outputs for your specific use cases.",
+    serviceType: "one-time",
+    price: "$8,000 - $20,000",
+    icon: "custom-llm.svg",
+    features: [
+      "Domain-specific training data preparation",
+      "Model fine-tuning and optimization",
+      "Safety and bias mitigation",
+      "Deployment and integration support",
+      "Performance evaluation"
+    ]
+  },
+  {
+    title: "AI Strategy Consulting",
+    description: "Develop a comprehensive AI roadmap aligned with your business goals and market position.",
+    longDescription: "Many organizations struggle to develop a coherent AI strategy that aligns with their business objectives. Our AI Strategy Consulting service helps you navigate the complex AI landscape and develop a clear roadmap for implementation. We analyze your market position, competitive landscape, and internal capabilities to create a strategic plan that delivers sustainable competitive advantage.",
+    serviceType: "ongoing",
+    price: "$5,000/mo",
+    icon: "strategy.svg",
+    features: [
+      "Competitive landscape analysis",
+      "Strategic opportunity assessment",
+      "Implementation planning",
+      "Resource allocation guidance",
+      "ROI forecasting and measurement"
+    ]
+  }
+];
+---
+
+<MainLayout title="Services">
+  <Header slot="header" />
+  
+  <!-- Hero Section -->
+  <section class="bg-primary-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-6">AI Services</h1>
+      <p class="text-xl max-w-3xl mx-auto">
+        Custom AI solutions designed to solve real business problems and create measurable value.
+      </p>
+    </div>
+  </section>
+  
+  <!-- Services List -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-16">
+        {services.map((service, index) => (
+          <div class={`flex flex-col ${index % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8`} id={service.title.toLowerCase().replace(/\s+/g, '-')}>
+            <div class="md:w-1/3">
+              <div class="bg-gray-100 p-6 rounded-lg h-full">
+                <div class="flex items-center mb-4">
+                  <div class="mr-4 bg-white p-3 rounded-full">
+                    <img src={`/icons/${service.icon}`} alt={service.title} class="w-12 h-12" />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-semibold">{service.title}</h3>
+                    <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      service.serviceType === 'one-time' ? 'bg-blue-100 text-blue-800' : 
+                      service.serviceType === 'ongoing' ? 'bg-green-100 text-green-800' : 
+                      'bg-purple-100 text-purple-800'
+                    }`}>
+                      {service.serviceType === 'one-time' ? 'One-time Service' : 
+                       service.serviceType === 'ongoing' ? 'Ongoing Support' : 
+                       'AI-as-a-Service'}
+                    </span>
+                  </div>
+                </div>
+                <p class="text-gray-700 mb-4">{service.description}</p>
+                <p class="text-xl font-bold text-primary-700 mb-6">Starting at {service.price}</p>
+                <ul class="space-y-2">
+                  {service.features.map(feature => (
+                    <li class="flex items-start">
+                      <svg class="h-5 w-5 text-primary-600 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <h2 class="text-3xl font-bold font-heading mb-6 text-gray-900">{service.title}</h2>
+              <p class="text-lg text-gray-700 mb-6 leading-relaxed">{service.longDescription}</p>
+              <p class="mb-8">
+                This service is ideal for companies looking to {
+                  service.serviceType === 'one-time' ? 'address a specific challenge with a focused AI solution.' : 
+                  service.serviceType === 'ongoing' ? 'build long-term AI capabilities with expert guidance.' : 
+                  'implement AI without managing the infrastructure and technical complexity.'
+                }
+              </p>
+              <a 
+                href="/contact" 
+                class="inline-flex items-center px-5 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors"
+              >
+                Discuss Your Project
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Tools Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold font-heading mb-4 text-gray-900">AI Tools & Technologies</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          I leverage industry-leading AI platforms and technologies to deliver custom solutions.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <!-- Tool Logos (Placeholders) -->
+        <div class="flex flex-col items-center">
+          <div class="w-24 h-24 bg-white rounded-full shadow-md flex items-center justify-center p-4 mb-4">
+            <span class="text-2xl font-bold text-gray-500">Ollama</span>
+          </div>
+          <h3 class="font-medium text-gray-900">Ollama</h3>
+        </div>
+        
+        <div class="flex flex-col items-center">
+          <div class="w-24 h-24 bg-white rounded-full shadow-md flex items-center justify-center p-4 mb-4">
+            <span class="text-2xl font-bold text-gray-500">CrewAI</span>
+          </div>
+          <h3 class="font-medium text-gray-900">CrewAI</h3>
+        </div>
+        
+        <div class="flex flex-col items-center">
+          <div class="w-24 h-24 bg-white rounded-full shadow-md flex items-center justify-center p-4 mb-4">
+            <span class="text-2xl font-bold text-gray-500">LangChain</span>
+          </div>
+          <h3 class="font-medium text-gray-900">LangChain</h3>
+        </div>
+        
+        <div class="flex flex-col items-center">
+          <div class="w-24 h-24 bg-white rounded-full shadow-md flex items-center justify-center p-4 mb-4">
+            <span class="text-2xl font-bold text-gray-500">OpenAI</span>
+          </div>
+          <h3 class="font-medium text-gray-900">OpenAI</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Call to Action -->
+  <CallToAction
+    title="Ready to explore how AI can transform your business?"
+    description="Schedule a free discovery call to discuss your specific challenges and how my services can help."
+    buttonText="Book Your Free Discovery Call"
+  />
+  
+  <Footer slot="footer" />
+</MainLayout>
