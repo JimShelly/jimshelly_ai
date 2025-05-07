@@ -76,6 +76,10 @@ import Footer from "../components/Footer.astro";
               ></textarea>
             </div>
             
+            <!-- reCAPTCHA v2 -->
+            <div class="g-recaptcha" data-sitekey="6Ldw1TErAAAAAKaBVGBCk6uaFtnoTBCGcPUW9LU8"></div>
+            <div id="captcha-error" class="text-red-500 hidden">Please complete the reCAPTCHA.</div>
+            
             <div class="flex items-center">
               <input
                 type="checkbox"
@@ -93,9 +97,11 @@ import Footer from "../components/Footer.astro";
               <button
                 type="submit"
                 class="inline-block bg-primary-600 text-white px-6 py-3 rounded-md font-medium hover:bg-primary-700 transition-colors"
+                id="submit-button"
               >
                 Request an Intro Call
               </button>
+              <p id="form-status" class="mt-4 text-center hidden"></p>
             </div>
           </form>
         </div>
@@ -201,8 +207,11 @@ import Footer from "../components/Footer.astro";
   <Footer slot="footer" />
 </MainLayout>
 
+<!-- Load the reCAPTCHA API script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <script>
-  // Simple form handling - in a real implementation, use Netlify Forms or another form handling service
+  // Form handling with Google Sheets integration
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contact-form');
     
@@ -210,19 +219,92 @@ import Footer from "../components/Footer.astro";
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Simulating form submission
         const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
+        const formStatus = document.getElementById('form-status');
+        const captchaError = document.getElementById('captcha-error');
         
-        // In a real implementation, you would send the form data to your backend
-        setTimeout(() => {
-          alert('Thank you for your message! I will get back to you soon.');
-          form.reset();
-          submitButton.disabled = false;
-          submitButton.textContent = 'Request an Intro Call';
-        }, 1500);
+        // Verify reCAPTCHA
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+          captchaError.classList.remove('hidden');
+          return;
+        } else {
+          captchaError.classList.add('hidden');
+        }
+        
+        if(submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Sending...';
+        }
+
+        // Get form data
+        const formData = new FormData(form);
+        const formProps = Object.fromEntries(formData);
+        
+        // Add reCAPTCHA response to form data
+        formProps['g-recaptcha-response'] = recaptchaResponse;
+        
+        // Send data to Google Sheets
+        sendToGoogleSheets(formProps)
+          .then(response => {
+            if (response.result === 'success') {
+              // Success message
+              formStatus.textContent = 'Thank you for your message! I will get back to you soon.';
+              formStatus.classList.remove('hidden', 'text-red-500');
+              formStatus.classList.add('text-green-600');
+              form.reset();
+              // Reset reCAPTCHA
+              grecaptcha.reset();
+            } else {
+              // Error message
+              formStatus.textContent = 'There was a problem submitting your form. Please try again.';
+              formStatus.classList.remove('hidden', 'text-green-600');
+              formStatus.classList.add('text-red-500');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            formStatus.textContent = 'There was a problem submitting your form. Please try again.';
+            formStatus.classList.remove('hidden', 'text-green-600');
+            formStatus.classList.add('text-red-500');
+          })
+          .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Request an Intro Call';
+            formStatus.classList.remove('hidden');
+          });
       });
     }
   });
+
+  /**
+   * Send form data to Google Sheets
+   * @param {Object} formData - The form data to send
+   * @returns {Promise} - Promise with the response
+   */
+  async function sendToGoogleSheets(formData) {
+    // PLACEHOLDER: Replace with your actual Google Sheets API endpoint
+    const GOOGLE_SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzxXX_AjtiwATQ85nBG36gjE2sDgZ8dLpeXU5zyCPfY490qToRPNpZQDEuleTwL85WDnA/exec';
+    
+    try {
+      // Add timestamp
+      formData.timestamp = new Date().toISOString();
+      
+      const response = await fetch(GOOGLE_SHEETS_API_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Important for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      // Since no-cors doesn't give us a proper response to parse,
+      // we'll just assume it was successful
+      return { result: 'success' };
+    } catch (error) {
+      console.error('Error sending to Google Sheets:', error);
+      return { result: 'error', message: error.message };
+    }
+  }
 </script>
